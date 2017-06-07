@@ -9,7 +9,7 @@ var stats;
 
 function setup() {
   target = [];
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 30; i++) {
     target.push({
       r: floor(random(0, 255)),
       g: floor(random(0, 255)),
@@ -34,6 +34,7 @@ function draw() {
   population.evaluate();
   if (population.generations%500 === 0) {
     console.log(population.generations);
+    population.dibujar();
   }
 
   if (population.isFinished()){
