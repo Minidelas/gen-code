@@ -8,36 +8,33 @@ var allPhrases;
 var stats;
 
 function setup() {
-  target = [];
-  for (var i = 0; i < 10; i++) {
-    target.push({
-      r: floor(random(0, 255)),
-      g: floor(random(0, 255)),
-      b: floor(random(0, 255))
-    });
-  }
-  popmax = 500;
+  target = 'To be or not to be';
+  popmax = 50;
   mutationRate = 0.01;
 
   population = new population(target, mutationRate, popmax);
+  population.calcFitness();
   createCanvas(1800, 1800);
-
-
+  background(255);
 }
 
 function draw() {
-  pintarTarget();
-  pintar(population.best);
-  population.calcFitness();
-  population.naturalSelection();
+  frameRate(15);
+  // population.naturalSelection();
   population.generate();
   population.evaluate();
+  population.calcFitness();
+  background(255);
+  pintarTarget();
+  pintar(population.best);
+  population.dibujar();
+
   if (population.generations%500 === 0) {
+    console.log(population.population);
     console.log(population.generations);
   }
 
   if (population.isFinished()){
-    population.dibujar();
     console.log(population.generations);
     console.log('finish');
     noLoop();
@@ -45,29 +42,15 @@ function draw() {
 }
 
 function pintarTarget() {
-  for (var i = 0; i < target.length; i++) {
-    var dist = 5;
-    var c = color(
-      target[i].r,
-      target[i].g,
-      target[i].b
-    );
-    fill(c);  // Use color variable 'c' as fill color
-    noStroke();  // Don't draw a stroke around shapes
-    rect(400, 400+(10+dist)*i, dist+20, dist+10);
-  }
+  textSize(30);
+  text(target, 10, 30);
+  fill(0,102,153);
 }
 
 function pintar(best) {
-  for (var i = 0; i < best.length; i++) {
-    var dist = 5;
-    var c = color(
-      best[i].r,
-      best[i].g,
-      best[i].b
-    );
-    fill(c);  // Use color variable 'c' as fill color
-    noStroke();  // Don't draw a stroke around shapes
-    rect(375, 400+(10+dist)*i, dist+20, dist+10);
-  }
+  var aux = best.genes.join("");
+  textSize(30);
+  text(aux, 10, 60);
+  text(sqrt(population.avgFitness), 10, 90);
+  fill(0,102,153);
 }

@@ -1,42 +1,27 @@
-function newColor(own, target) {
-  var gen = {
-    r: floor(random(0, 255)),
-    g: floor(random(0, 255)),
-    b: floor(random(0, 255))
-  };
-  if (own && target) {
-    gen.r = closeMutation(own.r, target.r),
-    gen.g = closeMutation(own.g, target.g),
-    gen.b = closeMutation(own.b, target.b)
-  }
-  return gen;
+function newChar() {
+  var gen = floor(random(63,122));
+  if (gen === 63) gen = 32;
+  if (gen === 64) gen = 46;
+  return String.fromCharCode(gen);
 }
 
-function closeMutation(own, target) {
-  if (own > target) {
-    return floor(random(0, own));
-  } else if (own < target) {
-    return floor(random(own, 255));
-  } else {
-    return own;
-  }
-}
 
 function DNA(num) {
   this.genes = [];
   this.fitness = 0;
   for (var i = 0; i < num; i++) {
-    this.genes[i] = newColor();
+    this.genes[i] = newChar();
   }
 
   this.calcFitness = function (target) {
     var score = 0;
     for (var i = 0; i < this.genes.length; i++) {
-      score += 100 - floor((abs(this.genes[i].r - target[i].r)/255)*100);
-      score += 100 - floor((abs(this.genes[i].g - target[i].g)/255)*100);
-      score += 100 - floor((abs(this.genes[i].b - target[i].b)/255)*100);
+      if (this.genes[i] === target[i]) {
+        score++;
+      }
     }
-    this.fitness = score / (3 * this.genes.length);
+    this.fitness = score / this.genes.length;
+    this.fitness = pow(this.fitness, 2);
   }
 
   this.crossover = function(partner) {
@@ -52,8 +37,7 @@ function DNA(num) {
   this.mutate = function(mutationRate, target) {
     for (var i = 0; i < this.genes.length; i++) {
       if (random(1) < mutationRate) {
-        // this.genes[i] = newColor(this.genes[i]);
-        this.genes[i] = newColor(this.genes[i], target[i]);
+        this.genes[i] = newChar();
       }
     }
   }
