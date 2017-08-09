@@ -1,4 +1,5 @@
 function population(p, m, num) {
+  var muestreo = 50;
   this.population;
   this.matingPool;
   this.generations = 0;
@@ -7,6 +8,8 @@ function population(p, m, num) {
   this.mutationRate = m;
 
   this.best;
+  this.arrBest;
+  this.arrBest = [];
 
   this.population = [];
   for (var i = 0; i < num; i++) {
@@ -25,6 +28,10 @@ function population(p, m, num) {
         this.best = this.population[i];
       }
     }
+    if (this.arrBest.length > muestreo) {
+      this.arrBest.shift();
+    }
+    this.arrBest.push(this.best);
   }
   this.calcFitness();
 
@@ -83,18 +90,37 @@ function population(p, m, num) {
     return this.finished;
   }
 
-  this.dibujar = function (best) {
-    for (var i = 0; i < this.population.length; i++) {
-      for (var j = 0; j < this.population[i].genes.length; j++) {
+  this.dibujar = function () {
+    // for (var i = 0; i < this.population.length; i++) {
+    //   for (var j = 0; j < this.population[i].genes.length; j++) {
+    //     var dist = 2;
+    //     var c = color(
+    //       this.population[i].genes[j].r,
+    //       this.population[i].genes[j].g,
+    //       this.population[i].genes[j].b
+    //     );
+    //     fill(c);  // Use color variable 'c' as fill color
+    //     noStroke();  // Don't draw a stroke around shapes
+    //     rect(dist*i, dist*j, dist, dist);
+    //   }
+    //
+    // }
+    var aux = 0;
+    if (this.arrBest.length >= muestreo) {
+      aux = this.arrBest.length - muestreo;
+    }
+
+    for (var i = aux; i < this.arrBest.length; i++) {
+      for (var j = 0; j < this.arrBest[i].genes.length; j++) {
         var dist = 5;
         var c = color(
-          this.population[i].genes[j].r,
-          this.population[i].genes[j].g,
-          this.population[i].genes[j].b
+          this.arrBest[i].genes[j].r,
+          this.arrBest[i].genes[j].g,
+          this.arrBest[i].genes[j].b
         );
         fill(c);  // Use color variable 'c' as fill color
         noStroke();  // Don't draw a stroke around shapes
-        rect(dist*i, dist*j, dist, dist);
+        rect(dist*(i-aux), dist*j, dist, dist);
       }
 
     }

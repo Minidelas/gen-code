@@ -9,7 +9,7 @@ var stats;
 
 function setup() {
   target = [];
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 15; i++) {
     target.push({
       r: floor(random(0, 255)),
       g: floor(random(0, 255)),
@@ -26,15 +26,16 @@ function setup() {
 }
 
 function draw() {
+  // frameRate(15);
   pintarTarget();
   pintar(population.best);
   population.calcFitness();
   population.naturalSelection();
   population.generate();
   population.evaluate();
+  population.dibujar();
   if (population.generations%500 === 0) {
     console.log(population.generations);
-    population.dibujar();
   }
 
   if (population.isFinished()){
