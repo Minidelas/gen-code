@@ -1,13 +1,29 @@
+// function newColor(own, target) {
+//   var gen = {
+//     r: floor(random(0, 255)),
+//     g: floor(random(0, 255)),
+//     b: floor(random(0, 255))
+//   };
+//   if (own && target) {
+//     gen.r = closeMutation(own.r, target.r),
+//     gen.g = closeMutation(own.g, target.g),
+//     gen.b = closeMutation(own.b, target.b)
+//   }
+//   return gen;
+// }
+
 function newColor(own, target) {
+  var c = floor(random(0, 255));
   var gen = {
-    r: floor(random(0, 255)),
-    g: floor(random(0, 255)),
-    b: floor(random(0, 255))
+    r: c,
+    g: c,
+    b: c
   };
   if (own && target) {
-    gen.r = closeMutation(own.r, target.r),
-    gen.g = closeMutation(own.g, target.g),
-    gen.b = closeMutation(own.b, target.b)
+    var cm = closeMutation(own.r, target.r);
+    gen.r = cm;
+    gen.g = cm;
+    gen.b = cm;
   }
   return gen;
 }
@@ -42,15 +58,15 @@ function DNA(num) {
       }
     }
     this.fitness = score / (3 * this.genes.length);
+    // this.fitness = pow(this.fitness, 2);
   }
 
   this.crossover = function(partner) {
     var child = new DNA(this.genes.length);
-    var midpoint_i = floor(random(this.genes.length));
     for (var i = 0; i < this.genes.length; i++) {
+      var midpoint_j = floor(random(this.genes[i].length));
       for (var j = 0; j < this.genes[i].length; j++) {
-        var midpoint_j = floor(random(this.genes[i].length));
-        if (i > midpoint_i && j > midpoint_j) child.genes[i][j] = this.genes[i][j];
+        if (j > midpoint_j) child.genes[i][j] = this.genes[i][j];
         else child.genes[i][j] = partner.genes[i][j];
       }
     }

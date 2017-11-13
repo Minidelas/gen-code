@@ -3,33 +3,15 @@ var popmax;
 var mutationRate;
 var population;
 
-var grid_length = 100;
+var grid_length = 25;
+const DIST_ = 1;
+var bestfitness = 0;
 
 var time = 0;
 
 var FUCKING_BEST;
 
 const noise = new Noise();
-
-// function setup() {
-//   noise.seed(random());
-// }
-//
-// function draw() {
-//   frameRate(10);
-//   console.log("A = ", a );
-//   console.log("B = ", b );
-//   a++;
-//   b++;
-//   a = a > 100 ? 0 : a;
-//   b = b > 100 ? 0 : b;
-//   console.log( floor( abs( noise.simplex3(a/100, b/100, time) ) * 255) );
-//   time++;
-//   console.log( floor( abs( noise.simplex3(a/100, b/100, time) ) * 255) );
-//   time++;
-//   console.log( floor( abs( noise.simplex3(a/100, b/100, time) ) * 255) );
-//   time++;
-// }
 
 function setup() {
   noise.seed(random());
@@ -40,28 +22,16 @@ function setup() {
 
   for (var i = 0; i < target.length; i++) {
     for (var j = 0; j < grid_length; j++) {
-      var color = {
-        r: null,
-        g: null,
-        b: null
-      }
-      color.r = floor(abs(noise.perlin3(i / 100, j / 100, time)) * 255);
-      time++;
-      color.g = floor(abs(noise.perlin3(i / 100, j / 100, time)) * 255);
-      time++;
-      color.b = floor(abs(noise.perlin3(i / 100, j / 100, time)) * 255);
-      time++;
-      // target[i].push({
-      //   r: floor(abs(noise.simplex2(i / 100, j / 100)) * 255),
-      //   g: floor(abs(noise.simplex2(i / 100, j / 100)) * 255),
-      //   b: floor(abs(noise.simplex2(i / 100, j / 100)) * 255)
-      // });
-      target[i].push(color);
+      target[i].push({
+        r: floor(abs(noise.simplex2(i / 100, j / 100)) * 255),
+        g: floor(abs(noise.simplex2(i / 100, j / 100)) * 255),
+        b: floor(abs(noise.simplex2(i / 100, j / 100)) * 255)
+      });
     }
   }
 
-  popmax = 50;
-  mutationRate = 0.01;
+  popmax = 100;
+  mutationRate = 0.05;
 
   population = new population(target, mutationRate, popmax);
 
@@ -81,9 +51,13 @@ function draw() {
   population.generate();
   population.evaluate();
   // population.dibujar();
-  if (population.generations%10 === 0) {
-    FUCKING_BEST = population.best;
-    console.log(population.generations);
+  FUCKING_BEST = population.best;
+  if (population.generations%100 === 0) {
+    // console.log(population.getBestFitness());
+    bestfitness = population.getBestFitness() > bestfitness ? population.getBestFitness() : bestfitness;
+    // console.log("ACTUAL-> ",bestfitness);
+    console.log("MEJOR-> ",bestfitness);
+    // console.log(population.generations);
   }
 
   if (population.isFinished()){
@@ -98,7 +72,7 @@ function draw() {
 function pintarTarget() {
   for (var i = 0; i < target.length; i++) {
     for (var j = 0; j < target[i].length; j++) {
-      var dist = 3;
+      var dist = DIST_;
       var c = color(
         target[i][j].r,
         target[i][j].g,
@@ -114,7 +88,7 @@ function pintarTarget() {
 function pintar(best) {
   for (var i = 0; i < best.length; i++) {
     for (var j = 0; j < best[i].length; j++) {
-      var dist = 3;
+      var dist = DIST_;
       var c = color(
         best[i][j].r,
         best[i][j].g,

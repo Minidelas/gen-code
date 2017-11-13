@@ -10,6 +10,7 @@ function population(p, m, num) {
   this.best;
   this.arrBest;
   this.arrBest = [];
+  this.best_fitness = 0;
 
   this.population = [];
 
@@ -24,6 +25,7 @@ function population(p, m, num) {
     for (var i = 0; i < this.population.length; i++) {
       this.population[i].calcFitness(target);
       if (this.best && this.population[i].fitness > this.best.fitness){
+        this.best_fitness = this.best.fitness;
         this.best = this.population[i];
       } else if (!this.best){
         this.best = this.population[i];
@@ -33,6 +35,10 @@ function population(p, m, num) {
       this.arrBest.shift();
     }
     this.arrBest.push(this.best);
+  }
+
+  this.getBestFitness = function () {
+    return this.best_fitness;
   }
 
   this.calcFitness();
@@ -84,7 +90,7 @@ function population(p, m, num) {
           }
         }
       }
-      if (cont === this.target.length) {
+      if (cont === (this.target.length * this.target[0].length)) {
         this.finished = true;
       }
     }
