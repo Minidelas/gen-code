@@ -1,29 +1,13 @@
-// function newColor(own, target) {
-//   var gen = {
-//     r: floor(random(0, 255)),
-//     g: floor(random(0, 255)),
-//     b: floor(random(0, 255))
-//   };
-//   if (own && target) {
-//     gen.r = closeMutation(own.r, target.r),
-//     gen.g = closeMutation(own.g, target.g),
-//     gen.b = closeMutation(own.b, target.b)
-//   }
-//   return gen;
-// }
-
 function newColor(own, target) {
-  var c = floor(random(0, 255));
   var gen = {
-    r: c,
-    g: c,
-    b: c
+    r: floor(random(0, 255)),
+    g: floor(random(0, 255)),
+    b: floor(random(0, 255))
   };
   if (own && target) {
-    var cm = closeMutation(own.r, target.r);
-    gen.r = cm;
-    gen.g = cm;
-    gen.b = cm;
+    gen.r = closeMutation(own.r, target.r);
+    gen.g = closeMutation(own.g, target.g);
+    gen.b = closeMutation(own.b, target.b);
   }
   return gen;
 }
@@ -77,7 +61,6 @@ function DNA(num) {
     for (var i = 0; i < this.genes.length; i++) {
       for (var j = 0; j < this.genes[i].length; j++) {
         if (random(1) < mutationRate) {
-          // this.genes[i] = newColor(this.genes[i]);
           this.genes[i][j] = newColor(this.genes[i][j], target[i][j]);
         }
       }

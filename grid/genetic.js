@@ -7,26 +7,32 @@ var grid_length = 25;
 const DIST_ = 1;
 var bestfitness = 0;
 
-var time = 0;
+
+var freq = 3;
+var simmetry = 0.5;
 
 var FUCKING_BEST;
 
-const noise = new Noise();
-
 function setup() {
-  noise.seed(random());
   target = [];
   for (var i = 0; i < grid_length; i++) {
     target[i] = [];
   }
 
+  var color_r = inicializarColor(grid_length, random(3));
+  var color_g = inicializarColor(grid_length, random(3));
+  var color_b = inicializarColor(grid_length, random(3));
+
   for (var i = 0; i < target.length; i++) {
     for (var j = 0; j < grid_length; j++) {
-      target[i].push({
-        r: floor(abs(noise.simplex2(i / 100, j / 100)) * 255),
-        g: floor(abs(noise.simplex2(i / 100, j / 100)) * 255),
-        b: floor(abs(noise.simplex2(i / 100, j / 100)) * 255)
-      });
+
+      var color = {
+        r: color_r[i][j],
+        g: color_g[i][j],
+        b: color_b[i][j]
+      };
+
+      target[i].push(color);
     }
   }
 
@@ -51,8 +57,8 @@ function draw() {
   population.generate();
   population.evaluate();
   // population.dibujar();
-  FUCKING_BEST = population.best;
   if (population.generations%100 === 0) {
+    FUCKING_BEST = population.best;
     // console.log(population.getBestFitness());
     bestfitness = population.getBestFitness() > bestfitness ? population.getBestFitness() : bestfitness;
     // console.log("ACTUAL-> ",bestfitness);
@@ -99,4 +105,21 @@ function pintar(best) {
       rect((dist)*i + (grid_length * dist), (dist)*j, dist, dist);
     }
   }
+}
+
+function inicializarColor(length, freq, seed) {
+ seed ? noiseSeed(seed) : null;
+ var color_return = [];
+
+ for (var i = 0; i < length; i++) {
+   color_return[i] = [];
+ }
+
+ for (var j = 0; j < color_return.length; j++) {
+   for (var k = 0; k < length; k++) {
+     var val_color = floor(noise(freq * (j/length), freq * (k/length)) * 256);
+     color_return[j].push(val_color);
+   }
+ }
+ return color_return;
 }

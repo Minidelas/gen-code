@@ -52,10 +52,7 @@ function population(p, m, num) {
         maxFitness = this.population[i].fitness;
         this.best = this.population[i].genes;
       }
-    }
-
-    for (var i = 0; i < this.population.length; i++) {
-      var fitness = map(this.population[i].fitness, 0, maxFitness, 0 ,1);
+      var fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
       var n = floor(fitness * 100);
       for (var j = 0; j < n; j++) {
         this.matingPool.push(this.population[i]);
