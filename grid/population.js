@@ -8,7 +8,6 @@ function population(p, m, num) {
   this.mutationRate = m;
 
   this.best;
-  this.arrBest;
   this.arrBest = [];
   this.best_fitness = 0;
 
